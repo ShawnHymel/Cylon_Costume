@@ -79,7 +79,7 @@ void loop() {
       green = 0; //red >> 3;
       strip.setPixelColor(i, strip.Color(red, green, 0));
       strip.show();
-    }
+    } 
     delay(PULSE_DELAY);
     
     // Adjust brightness (for pulsating)
