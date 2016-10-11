@@ -3,6 +3,7 @@
  *
  * Author: Shawn Hymel
  * Date: September 11, 2014
+ * Update: October 10, 2016
  * License: As long as you retain this notice you can do whatever
  * you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return.
@@ -15,10 +16,12 @@
 // Parameters
 #define BUTTON_PIN   2   // Must be hardware interrupt pin
 #define CMD_PIN      6   // Pin to send commands to the LED strip
-#define NUM_PIXELS   30  // Number of pixels (LEDs) in the strip
+#define NUM_PIXELS   29  // Number of pixels (LEDs) in the strip
+#define PIXEL_START  6   // Which pixel to start whoosh on
+#define PIXEL_END    24  // Which pixel to end whoosh on
 #define NUM_CYLON    4   // Num times to woosh (one direction)
-#define FRAME_DELAY  40 // Milliseconds between frame updates
-#define WHOOSH_DELAY 500 // Milliseconds between wooshes
+#define FRAME_DELAY  50  // Milliseconds between frame updates
+#define WHOOSH_DELAY 600 // Milliseconds between wooshes
 
 // Global variables
 int8_t whoosh_dir;
@@ -49,13 +52,13 @@ void loop() {
   for ( int i = 0; i < NUM_CYLON; i++ ) {
     
     // Single woosh
-    for ( int j = 0; j < strip.numPixels(); j++ ) {
+    for ( int j = 0; j <= PIXEL_END - PIXEL_START; j++ ) {
       
       // Determine main LED to light up
       if ( whoosh_dir == 1 ) {
-        led_num = j;
+        led_num = j + PIXEL_START;
       } else {
-        led_num = (strip.numPixels() - 1) - j;
+        led_num = PIXEL_END - j;
       }
       
       // Light up primary LED
@@ -79,7 +82,7 @@ void loop() {
       
       // Display LED and wait 
       strip.show();
-      if ( j == (strip.numPixels() - 1) ) {
+      if ( j == PIXEL_END - PIXEL_START ) {
         delay(WHOOSH_DELAY);
       } else {
         delay(FRAME_DELAY);
